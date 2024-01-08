@@ -2,17 +2,22 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: circleci/python:3.7.6  # Use the CircleCI Python image or your preferred base image
+      - image: docker:20.10.5 # Use a Docker image that has Docker installed
 
     steps:
-      - checkout  # Check out the code
-    
-      # Other steps to install dependencies, tests, etc.
-      
+      - checkout
+
+      # Build your Docker image
       - run:
-          name: Build Docker Image
+          name: Build Docker image
           command: |
-            docker build -t 7618/springboot_mongodb_circleci:1 .
-            docker login -u 7618 -p Harman789$
-            #docker tag your_image_name:tag $DOCKERHUB_USERNAME/your_image_name:tag
-            docker push 7618/springboot_mongodb_circleci:1
+            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 695357413142.dkr.ecr.us-east-1.amazonaws.com
+            docker build -t circleci .
+            docker tag circleci:latest 695357413142.dkr.ecr.us-east-1.amazonaws.com/circleci:latest
+
+      # Push the Docker image to a container registry
+      - run:
+          name: Push Docker image
+          command: |
+            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 695357413142.dkr.ecr.us-east-1.amazonaws.com
+            docker push 695357413142.dkr.ecr.us-east-1.amazonaws.com/circleci:latest
