@@ -7,6 +7,11 @@ jobs:
     steps:
       - checkout
 
+      - run:
+          name: Install AWS CLI
+          command: |            
+            sudo yum install awscli -y
+
       # Build your Docker image
       - run:
           name: Build Docker image
