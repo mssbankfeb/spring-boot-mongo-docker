@@ -10,7 +10,7 @@ jobs:
       - run:
           name: Install AWS CLI
           command: |            
-            sudo yum install awscli -y
+            yum install awscli -y
 
       # Build your Docker image
       - run:
